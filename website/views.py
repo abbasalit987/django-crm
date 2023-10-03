@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 # django messaging system
 from django.contrib import messages
-from .forms import SignUpForm
+from .forms import SignUpForm, AddRecordForm
 from .models import Record
 
 # Create your views here.
@@ -52,3 +52,51 @@ def registerUser(request):
         return render(request, 'register/register.html', {'form': form})
 
     return render(request, 'register/register.html', {'form': form})
+
+
+def customerRecord(request, pk):
+    if request.user.is_authenticated:
+        customerRecord = Record.objects.get(id=pk)
+        return render(request, 'record/record.html', {'customerRecord': customerRecord})
+    else:
+        messages.success(request, "Please login to view record")
+        return redirect('home')
+
+
+def deleteRecord(request, pk):
+    if request.user.is_authenticated:
+        toDelete = Record.objects.get(id=pk)
+        toDelete.delete()
+        messages.success(request, "Record deleted successfully!")
+        return redirect('home')
+    else:
+        messages.success(request, "Please login to view record")
+        return redirect('home')
+
+
+def addRecord(request):
+    form = AddRecordForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Record Added...")
+                return redirect('home')
+        return render(request, 'record/add-record.html', {'form': form})
+    else:
+        messages.success(request, "Please login to view record")
+        return redirect('home')
+
+
+def editRecord(request, pk):
+    if request.user.is_authenticated:
+        currentRecord = Record.objects.get(id=pk)
+        form = AddRecordForm(request.POST or None, instance=currentRecord)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Record updated successfully!")
+            return redirect('home')
+        return render(request, 'record/edit-record.html', {'form': form})
+    else:
+        messages.success(request, "Please login to view record")
+        return redirect('home')

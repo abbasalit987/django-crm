@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
+from .models import Record
 
 
 class SignUpForm(UserCreationForm):
@@ -33,3 +34,42 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
+
+
+class AddRecordForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=64, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'First Name',
+        'class': 'form-control'
+    }), label="")
+    last_name = forms.CharField(max_length=64, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Last Name',
+        'class': 'form-control'
+    }), label="")
+    email = forms.CharField(max_length=128, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Email Address',
+        'class': 'form-control'
+    }), label="")
+    phone = forms.CharField(max_length=16, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Phone Number',
+        'class': 'form-control'
+    }), label="")
+    address = forms.CharField(max_length=128, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Residence Address',
+        'class': 'form-control'
+    }), label="")
+    city = forms.CharField(max_length=64, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'City Name',
+        'class': 'form-control'
+    }), label="")
+    state = forms.CharField(max_length=64, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'State Name',
+        'class': 'form-control'
+    }), label="")
+    pincode = forms.CharField(max_length=16, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Pincode',
+        'class': 'form-control'
+    }), label="")
+
+    class Meta:
+        model = Record
+        exclude = ('user',)

@@ -6,4 +6,8 @@ urlpatterns = [
     # path('login/', views.loginUser, name="login"),
     path('logout/', views.logoutUser, name="logout"),
     path('register/', views.registerUser, name="register"),
+    path('record/<int:pk>', views.customerRecord, name="record"),
+    path('delete-record/<int:pk>', views.deleteRecord, name="delete-record"),
+    path('add-record/', views.addRecord, name="add-record"),
+    path('edit-record/<int:pk>', views.editRecord, name="edit-record"),
 ]
